@@ -1,0 +1,5 @@
+node_modules/
+storage/*
+!storage/example
+storage/example/*
+!storage/example/test.json
