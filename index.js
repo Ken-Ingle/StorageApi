@@ -1,4 +1,6 @@
 const Koa = require('koa');            // Koa: newer, better express.js
+const KoaBody = require('koa-body');   // Koa body parser middleware
+const KoaCors = require('@koa/cors');
 const Router = require('koa-router');  // Router for Koa
 const fs = require("fs");              // Normal Node.js filesystem
 const fsp = require("fs").promises;    // filesystem with better async
@@ -14,6 +16,7 @@ const router = new Router();
 
 // -------------------------------------------------
 router.get('/', ctx => {
+  ctx.res.setHeader("Access-Control-Allow-Origin", "*");
   ctx.body = `
       <html>
         <head>
@@ -56,6 +59,7 @@ router.get('/:folder', async ctx => {
 
   // return our results, "OK"
   ctx.res.setHeader("Content-Type", "application/json");
+  ctx.res.setHeader("Access-Control-Allow-Origin", "*");
   ctx.body = data;
   ctx.response.status = 200;
   console.log(`${APP_NAME}: Requested contents of ${folder} returned: ${data.length} item(s)`)
@@ -76,34 +80,37 @@ router.get('/:folder/:file', async ctx => {
     ctx.throw(404, `${APP_NAME}: Data for ${folder}/${file} not found`);
   }
 
-  const contents = await fsp.readFile(fullPath);
+  const contents = await fsp.readFile(fullPath, 'utf-8');
+  const json = JSON.parse(contents);
+  ctx.body = json;
   ctx.res.setHeader("Content-Type", "application/json");
+  ctx.res.setHeader("Access-Control-Allow-Origin", "*");
   ctx.response.status = 200;
-  ctx.body = contents;
   console.log(`${APP_NAME}: Requested ${folder}/${file}, returned: ${fullPath}`)
 }); 
 
 // -------------------------------------------------
 // Save JSON data out to a file under the given folder,
 // using the folder as its name
-router.post('/:folder/:file', async ctx => {
+router.post('/:folder/:file', KoaBody(), async ctx => {
   const folder = ctx.params.folder;
   const file = ctx.params.file;
   const folderPath = path.join(STORAGE_PATH, folder);
   const fullPath = path.join(STORAGE_PATH, folder, file + '.json');
-  const contents = ctx.request.body;
+  const contents = JSON.stringify(ctx.request.body);
 
   if (!fs.existsSync(folderPath)) {
     await fsp.mkdir(folderPath);
   }
 
   await fsp.writeFile(fullPath, contents);
+  ctx.res.setHeader("Access-Control-Allow-Origin", "*");
   ctx.response.status = 200;
   console.log(`${APP_NAME}: Saved contents for ${folder}/${file} to ${fullPath}`);
 })
 
 app
-  .use(require('koa-body')())
+  .use(KoaCors())
   .use(router.allowedMethods())
   .use(router.routes())
   .listen(PORT);
