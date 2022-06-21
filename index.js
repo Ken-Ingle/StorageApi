@@ -91,7 +91,7 @@ router.post('/:folder/:file', async ctx => {
   const file = ctx.params.file;
   const folderPath = path.join(STORAGE_PATH, folder);
   const fullPath = path.join(STORAGE_PATH, folder, file + '.json');
-  const contents = JSON.stringify(ctx.request.body);
+  const contents = ctx.request.body;
 
   if (!fs.existsSync(folderPath)) {
     await fsp.mkdir(folderPath);
