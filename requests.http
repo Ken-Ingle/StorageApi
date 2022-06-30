@@ -36,10 +36,12 @@ Content-Type: application/json
 POST http://localhost:3000/todos
 Content-Type: application/json
 
-{
-  "title": "Buy groceries",
-  "isComplete": false
-}
+[
+  {
+   "title": "Buy groceries",
+   "isComplete": false
+  }
+]
 
 ### ------------------------------------
 GET http://localhost:3000/todos
