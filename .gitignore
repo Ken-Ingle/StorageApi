@@ -7,3 +7,10 @@ storage/example/*
 !storage/todos
 storage/todos/*
 !storage/todos/UNKNOWN_USER.json
+
+!storage/auth
+storage/auth/*
+!storage/auth/daniel.json
+!storage/auth/gavin.json
+!storage/auth/ken.json
+!storage/auth/matt.json
