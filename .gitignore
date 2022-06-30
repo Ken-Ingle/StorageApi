@@ -3,3 +3,7 @@ storage/*
 !storage/example
 storage/example/*
 !storage/example/test.json
+
+!storage/todos
+storage/todos/*
+!storage/todos/UNKNOWN_USER.json
