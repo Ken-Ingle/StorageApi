@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --ignore storage/ index.js"
+    "start": "cross-env AUTH_ENABLED=0 nodemon --ignore storage/ src/index.js",
+    "auth": "cross-env AUTH_ENABLED=1 nodemon --ignore storage/ src/index.js",
+    "noauth": "cross-env AUTH_ENABLED=0 nodemon --ignore storage/ src/index.js"
   },
   "author": "ken@keningle.net",
   "license": "ISC",
@@ -16,6 +18,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "nodemon": "^2.0.16"
   }
 }
