@@ -28,6 +28,25 @@ Content-Type: application/json
 }
 
 ### ------------------------------------
+POST http://localhost:3000/signup
+Content-Type: application/json
+
+{
+  "user": "foo",
+  "password": "test123"
+}
+
+### ------------------------------------
+POST http://localhost:3000/change-password
+Content-Type: application/json
+
+{
+  "originalPassword": "test123",
+  "newPassword": "test456"
+}
+
+
+### ------------------------------------
 POST  http://localhost:3000/logout
 Content-Type: application/json
 
